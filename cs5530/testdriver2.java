@@ -12,11 +12,10 @@ public class testdriver2 {
 	 */
 	public static void displayMenu()
 	{
-		 System.out.println("        Welcome to the UTrack System     ");
-    	 System.out.println("1. search a course by cname and dname:");
-    	 System.out.println("2. enter your own query:");
-    	 System.out.println("3. exit:");
-    	 System.out.println("pleasse enter your choice:");
+		 System.out.println("        Welcome to the Airbnb-like System     ");
+    	         System.out.println("1. create a user:");
+    	         System.out.println("3. exit:");
+    	         System.out.println("please enter your choice:");
 	}
 	
 	public static void main(String[] args) {
@@ -24,8 +23,15 @@ public class testdriver2 {
 		System.out.println("Example for cs5530");
 		Connector con=null;
 		String choice;
-        String cname;
-        String dname;
+
+        String name;
+        String username;
+        String type; 
+        String password; 
+        String phone_number;
+        String address;        
+
+
         String sql=null;
         int c=0;
          try
@@ -51,12 +57,26 @@ public class testdriver2 {
 	            		 continue;
 	            	 if (c==1)
 	            	 {
-	            		 System.out.println("please enter a cname:");
-	            		 while ((cname = in.readLine()) == null && cname.length() == 0);
-	            		 System.out.println("please enter a dname:");
-	            		 while ((dname = in.readLine()) == null && dname.length() == 0);
-	            		 Course course=new Course();
-	            		 System.out.println(course.getCourse(cname, dname, con.stmt));
+
+	            		 System.out.println("please enter a name:");
+	            		 while ((name = in.readLine()) == null && name.length() == 0);
+
+	            		 System.out.println("please enter a usernamename:");
+	            		 while ((username = in.readLine()) == null && username.length() == 0);
+                                 System.out.println("please enter a type:");
+                                 while ((type = in.readLine()) == null && type.length() == 0);
+
+                                 System.out.println("please enter a password:");
+                                 while ((password = in.readLine()) == null && password.length() == 0);
+                               
+                                 System.out.println("please enter a phone_number:");
+                                 while ((phone_number = in.readLine()) == null && phone_number.length() == 0);
+
+                                 System.out.println("please enter an address:");
+                                 while ((address = in.readLine()) == null && address.length() == 0);
+
+	            		 User user=new User();
+                                 user.createUser(name, username, Integer.parseInt(type), password, phone_number, address, con.stmt);
 	            	 }
 	            	 else if (c==2)
 	            	 {	 
