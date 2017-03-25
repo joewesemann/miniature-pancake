@@ -30,7 +30,8 @@ public class testdriver2 {
 
                 System.out.println("Hello " + currentUser.getName() + ": ");
                 System.out.println("1. Reserve Housing:");
-                System.out.println("2. exit:");
+                System.out.println("3. Favorite a TH");
+                System.out.println("4. exit:");
                 System.out.println("please enter your choice:");
         }
 	
@@ -60,7 +61,7 @@ public class testdriver2 {
 	            		 
 	            		 continue;
 	            	 }
-	            	 if (c<1 | c>3)
+	            	 if (c<1 | c>4)
 	            		 continue;
 	            	 if (c==1)
 	            	 {
@@ -131,7 +132,7 @@ public class testdriver2 {
                          {
                                  continue;
                          }
-                         if (c<1 | c>3)
+                         if (c<1 | c>4)
                                  continue;
                          if (c==1)
                          {
@@ -145,14 +146,14 @@ public class testdriver2 {
                                  System.out.println("Please enter the start date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
                                  String housing_date_start = "";
                                  while ((housing_date_start = in.readLine()) == null && housing_date_start.length() == 0);
-                                 if(Integer.parseInt(housing_date_start) == 0) {
+                                 if(housing_date_start.equals("0")) {
                                      continue;
                                  }
 
                                  System.out.println("Please enter the end date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
                                  String housing_date_end = "";
                                  while ((housing_date_end = in.readLine()) == null && housing_date_end.length() == 0);
-                                 if(Integer.parseInt(housing_date_end) == 0) {
+                                 if(housing_date_end.equals("0")) {
                                      continue;
                                  }
 
@@ -164,9 +165,25 @@ public class testdriver2 {
                                  }
 
                                  Reserve reserve = new Reserve(housing_date_start, housing_date_end, 0, currentUser.getId(), Integer.parseInt(housing_id), Integer.parseInt(party));
-                                 reserve.create(con.stmt);
-                                 System.out.println("Your reservation was succesfully created. Thanks.");
+                                 System.out.println("Are you sure you want to reserve this house from " + housing_date_start + " until " + housing_date_end + "? (0 for yes, 1 for no)");
+                                 String confirm = "";
+                                 while ((confirm = in.readLine()) == null && confirm.length() == 0);
+
+                                 if(Integer.parseInt(confirm) == 0){
+                                         reserve.create(con.stmt);
+                                         System.out.println("Your reservation was succesfully created. Thanks.");
+                                 }
                                  continue;
+                         }
+                         else if(c == 3) 
+                         {
+                                 System.out.println("Please enter the Housing ID of the housing you would like to favorite: ");
+                                 String housing_id_favorite = "";
+                                 while ((housing_id_favorite = in.readLine()) == null && housing_id_favorite.length() == 0);
+                                 
+                                 Favorites fav = new Favorites(Integer.parseInt(housing_id_favorite), currentUser.getId());
+                                 fav.add(con.stmt);
+                                 System.out.println("Successfully added favorite. Thanks.");
                          }
                          else 
                          {
