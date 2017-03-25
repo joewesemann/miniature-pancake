@@ -7,6 +7,7 @@ public class User {
 	String name;
 	String username;
 	int type;
+	int uid;
 	String password;
 	String phone_number;
 	String address;
@@ -32,6 +33,18 @@ public class User {
         catch(Exception e)
         {
         	System.out.println("cannot execute the query");
+            e.printStackTrace();
+        }
+        try{
+            int lastid;
+            ResultSet result;
+            result = stmt.executeQuery("select last_insert_id() from schedule");
+            lastid = result.getInt("last_insert_id");
+            setUserId(lastid);
+        }
+        catch(Exception e)
+        {
+            System.out.println("Problem obtaining ID");
             e.printStackTrace();
         }
     }
@@ -65,6 +78,14 @@ public class User {
 	}
 	
 	//Getters and Setters
+	public void setUserId(int uid){
+		this.uid = uid;
+	}
+	
+	public int getUserId(){
+		return this.uid;
+	}
+	
 	public void setName(String name){
 		this.name = name;
 	}

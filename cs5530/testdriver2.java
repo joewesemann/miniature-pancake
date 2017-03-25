@@ -14,6 +14,7 @@ public class testdriver2 {
         static String phone_number;
         static String address;
         static User currentUser;
+        static th currentTH;
         static boolean loggedIn = false;
 	
 	public static void displayMenu()
@@ -25,14 +26,65 @@ public class testdriver2 {
     	         System.out.println("please enter your choice:");
 	}
 
-        public static void displayLoggedInMenu(User currentUser)
-        {
+    public static void displayLoggedInMenu(User currentUser)
+    {
+        System.out.println("Hello " + currentUser.getName() + ": ");
+        System.out.println("1. Reserve Housing:");
+        System.out.println("2. Add new property");
+        System.out.println("3. exit:");
+        System.out.println("please enter your choice:");
+    }
+    
+    public static void createNewTH(User currentUser, Statement stmt) throws Exception
+    {
+        String category;
+        String name;
+        String city;
+        String state;
+        String zip_code;
+		String street_address;
+		String url;
+		String picture;
+		String year_built;
+		String telephone;
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                         	
+		System.out.println("please enter a Property Name:");
+		while ((name = in.readLine()) == null && name.length() == 0);
 
-                System.out.println("Hello " + currentUser.getName() + ": ");
-                System.out.println("1. Reserve Housing:");
-                System.out.println("2. exit:");
-                System.out.println("please enter your choice:");
-        }
+		System.out.println("please enter category:");
+		while ((category = in.readLine()) == null && category.length() == 0);
+	            			
+		System.out.println("please enter a Street Address:");
+		while ((street_address = in.readLine()) == null && street_address.length() == 0);
+
+        System.out.println("please enter the property's city:");
+        while ((city = in.readLine()) == null && city.length() == 0);
+                               
+        System.out.println("Please enter the property's State:");
+        while ((state = in.readLine()) == null && state.length() == 0);
+
+        System.out.println("please enter the property's ZIP code:");
+        while ((zip_code = in.readLine()) == null && zip_code.length() == 0);
+                               
+        System.out.println("Please enter the property's URL:");
+        while ((url = in.readLine()) == null && url.length() == 0);
+
+        System.out.println("please enter a URL for the property's picture:");
+        while ((picture = in.readLine()) == null && picture.length() == 0);
+                               
+        System.out.println("Please enter the year the property was built:");
+        while ((year_built = in.readLine()) == null && year_built.length() == 0);
+
+        System.out.println("please enter the telephone number for the property:");
+        while ((telephone = in.readLine()) == null && telephone.length() == 0);
+        
+        int uid = currentUser.getUserId();
+        
+        currentTH = new th(uid, category, name, city, state, Integer.parseInt(zip_code), street_address, url, picture, Integer.parseInt(year_built), telephone);
+		currentTH.insertTh(stmt);
+    }
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -70,7 +122,7 @@ public class testdriver2 {
 
 	            		 System.out.println("please enter a usernamename:");
 	            		 while ((username = in.readLine()) == null && username.length() == 0);
-                                 System.out.println("please enter a type:");
+                                 System.out.println("please enter a type (Regular: 1, Admin: 2):");
                                  while ((type = in.readLine()) == null && type.length() == 0);
 
                                  System.out.println("please enter a password:");
@@ -99,7 +151,7 @@ public class testdriver2 {
 	            		 System.out.println("Please Enter Password:");
 	            		 while ((passWord = in.readLine()) == null & passWord.length() == 0);
 	            		 authUser.populateUser(userName, con.stmt);
-	            		 if(authUser.getPassword().equals(passWord)){
+	            		 if(authUser.getPassword() != null && authUser.getPassword().equals(passWord)){
 
 	            			 System.out.println("Authentication Successful\n");
                                          loggedIn = true;
@@ -107,8 +159,7 @@ public class testdriver2 {
                                          break;
 	            		 }
 	            		 else{
-	            			 System.out.println("password entered = " + passWord + "Real PW: " + authUser.getPassword());
-	            			 System.out.println(passWord == authUser.getPassword());
+	            			 System.out.println("Unsuccessful log-in attempt");
 	            		 }
 	            	 } 
 	            	 else
@@ -130,13 +181,18 @@ public class testdriver2 {
                          }catch (Exception e)
                          {
 
-                                 continue;
+                             continue;
                          }
                          if (c<1 | c>3)
                                  continue;
                          if (c==1)
                          {
-                                 System.out.println("please kill me\n");
+                             System.out.println("please kill me\n");
+                         }
+                         else if (c==2)
+                         {
+                         	createNewTH(currentUser, con.stmt);
+                            break;
                          }
                          else 
                          {

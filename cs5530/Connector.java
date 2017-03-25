@@ -7,6 +7,7 @@ public class Connector {
 	public Statement stmt;
 	public Connector() throws Exception {
 		try{
+			System.out.println("Connecting...");
 		 	String userName = "5530u01";
 	   		String password = "v9ebodl2";
 	        	String url = "jdbc:mysql://georgia.eng.utah.edu/5530db01";

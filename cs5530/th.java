@@ -15,13 +15,12 @@ public class th {
     String url;
     String picture;
     int year_built;
-    int telephone;
+    String telephone;
 	
 	public th(){}
 
-	public th(int hid, int user_id, String category, String name, String city, String state, int zip_code, String street_address, String url, String picture, int year_built, int telephone)
+	public th(int user_id, String category, String name, String city, String state, int zip_code, String street_address, String url, String picture, int year_built, String telephone)
 	{
-		setHid(hid);
 		setUserId(user_id);
 		setCategory(category);
 		setName(name);
@@ -35,16 +34,29 @@ public class th {
 		setTelephone(telephone);
 	}
 
-    public void inserTh(Statement stmt) {
+    public void insertTh(Statement stmt) {
     	String sql = "INSERT INTO th (user_id, category, name, city, state, zip_code, street_address, url, picture, year_built, telephone) " + 
-    	             "VALUES ('" + user_id + "', '" + category + "', " + name + ", '" + city + "', '" + state + "', '" + zip_code + "', '" + street_address + "', '" + url + "', '" + picture + "', '" + year_built + "', '" + telephone + "');";
+    	             "VALUES (" + user_id + ", '" + category + "', '" + name + "', '" + city + "', '" + state + "', " + zip_code + ", '" + street_address + "', '" + url + "', '" + picture + "', " + year_built + ", '" + telephone + "');";
         System.out.println("executing "+sql);
         try{
         	stmt.executeUpdate(sql);
-            }
+        }
         catch(Exception e)
         {
         	System.out.println("cannot execute the query");
+            e.printStackTrace();
+        }
+        try{
+
+            int lastid;
+            ResultSet result;
+            result = stmt.executeQuery("select last_insert_id() from th");
+            lastid = result.getInt("last_insert_id");
+            setHid(lastid);
+        }
+        catch(Exception e)
+        {
+            System.out.println("Problem obtaining ID");
             e.printStackTrace();
         }
     }
@@ -77,7 +89,7 @@ public class th {
 		    setUrl(results.getString("url"));
 		    setPicture(results.getString("picture"));
 		    setYearBuilt(results.getInt("year_built"));
-		    setTelephone(results.getInt("telephone"));
+		    setTelephone(results.getString("telephone"));
 		}
 	}
 	
@@ -172,11 +184,11 @@ public class th {
         return year_built;
     }
     
-    public void setTelephone(int telephone){
+    public void setTelephone(String telephone){
         this.telephone = telephone;
     }
     
-    public int getTelephone(){
+    public String getTelephone(){
         return telephone;
     }
 }
