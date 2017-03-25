@@ -4,6 +4,7 @@ import java.sql.*;
 
 public class User {
 	
+        int id;
 	String name;
 	String username;
 	int type;
@@ -54,8 +55,8 @@ public class User {
 	       }
 		System.out.println("User.getUser Query = "+query+"\n");
 		while (results.next()){
+                        setId(results.getInt("id"));
 			setName(results.getString("name"));
-			System.out.println(getName());
 			setUsername(results.getString("username"));
 			setType(results.getInt("type"));
 			setPassword(results.getString("password"));
@@ -64,7 +65,15 @@ public class User {
 		}
 	}
 	
+        public void setId(int id){
+                this.id = id;
+        }
+
 	//Getters and Setters
+        public int getId(){ 
+               return this.id;
+        }
+
 	public void setName(String name){
 		this.name = name;
 	}

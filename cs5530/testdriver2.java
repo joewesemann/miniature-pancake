@@ -129,19 +129,49 @@ public class testdriver2 {
                                  c = Integer.parseInt(choice);
                          }catch (Exception e)
                          {
-
                                  continue;
                          }
                          if (c<1 | c>3)
                                  continue;
                          if (c==1)
                          {
-                                 System.out.println("please kill me\n");
+                                 System.out.println("Please enter the Housing ID of the house you want to reserve, or '0' to return to main menu: ");
+                                 String housing_id = "";
+                                 while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
+                                 if(housing_id == "0") {
+                                     continue;
+                                 }
+
+                                 System.out.println("Please enter the start date you want to reserve for, or '0' to return to main menu: ");
+                                 String housing_date_start = "";
+                                 while ((housing_date_start = in.readLine()) == null && housing_date_start.length() == 0);
+                                 if(housing_date_start == "0") {
+                                     continue;
+                                 }
+
+                                 System.out.println("Please enter the end date you want to reserve for, or '0' to return to main menu: ");
+                                 String housing_date_end = "";
+                                 while ((housing_date_end = in.readLine()) == null && housing_date_end.length() == 0);
+                                 if(housing_date_end == "0") {
+                                     continue;
+                                 }
+
+                                 System.out.println("Please enter the number in your party, or '0' to return to main menu: ");
+                                 String party = "";
+                                 while ((party = in.readLine()) == null && party.length() == 0);
+                                 if(party == "0") {
+                                     continue;
+                                 }
+
+                                 Reserve reserve = new Reserve(housing_date_start, housing_date_end, 0, currentUser.getId(), Integer.parseInt(housing_id), Integer.parseInt(party));
+                                 reserve.create(con.stmt);
+                                 System.out.println("Your reservation was succesfully created. Thanks.");
+                                 continue;
                          }
                          else 
                          {
-                             con.stmt.close();
-                             break;
+                                 con.stmt.close();
+                                 break;
                          }
                      }
 
