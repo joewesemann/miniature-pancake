@@ -23,11 +23,21 @@ public class Th {
 	{
 		setHid(hid);
 		setUserId(user_id);
-		setCate
+		setCategory(category);
+		setName(name);
+		setCity(city);
+		setState(state);
+		setZipCode(zip_code);
+		setStreetAddress(street_address);
+		setUrl(url);
+		setPicture(picture);
+		setYearBuilt(year_built);
+		setTelephone(telephone);
 	}
 
     public void inserTh(Statement stmt) {
-    	String sql = "INSERT INTO user (name, username, type, password, phone_number, address) VALUES ('" + name + "', '" + username + "', " + type + ", '" + password + "', '" + phone_number + "', '" + address + "');";
+    	String sql = "INSERT INTO th (user_id, category, name, city, state, zip_code, street_address, url, picture, year_built, telephone) " + 
+    	             "VALUES ('" + user_id + "', '" + category + "', " + name + ", '" + city + "', '" + state + "', '" + zip_code + "', '" + street_address + "', '" + url + "', '" + picture + "', '" + year_built + "', '" + telephone + "');";
         System.out.println("executing "+sql);
         try{
         	stmt.executeUpdate(sql);
@@ -40,15 +50,13 @@ public class Th {
     }
 
 
-
-
-    //TODO: change to getTH	
-	public void populateUser(String username, Statement stmt) throws Exception
+    // Populate TH from table using hid
+	public void populateTH(int hid, Statement stmt) throws Exception
 	{
 		String query;
 		String resultstr="";
 		ResultSet results; 
-		query="Select * from user where username ='"+username+"'";
+		query="Select * from th where hid ='"+hid+"'";
 		try{
 			results = stmt.executeQuery(query);
 	       } catch(Exception e) {
@@ -58,13 +66,18 @@ public class Th {
 	       }
 		System.out.println("User.getUser Query = "+query+"\n");
 		while (results.next()){
-			setName(results.getString("name"));
-			System.out.println(getName());
-			setUsername(results.getString("username"));
-			setType(results.getInt("type"));
-			setPassword(results.getString("password"));
-			setPhoneNumber(results.getString("phone_number"));
-			setAddress(results.getString("address"));
+			setHid(results.getInt("hid"));
+		    setUserId(results.getInt("user_id"));
+		    setCategory(results.getString("category"));
+		    setName(results.getString("name"));
+		    setCity(results.getString("city"));
+		    setState(results.getString("state"));
+		    setZipCode(results.getInt("zip_code"));
+		    setStreetAddress(results.getString("street_address"));
+		    setUrl(results.getString("url"));
+		    setPicture(results.getString("picture"));
+		    setYearBuilt(results.getInt("year_built"));
+		    setTelephone(results.getInt("telephone"));
 		}
 	}
 	
