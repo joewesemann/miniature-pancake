@@ -10,10 +10,13 @@ public class testdriver2 {
 	/**
 	 * @param args
 	 */
+
+	
 	public static void displayMenu()
 	{
 		 System.out.println("        Welcome to the Airbnb-like System     ");
     	         System.out.println("1. create a user:");
+    	         System.out.println("2. Log-In");
     	         System.out.println("3. exit:");
     	         System.out.println("please enter your choice:");
 	}
@@ -29,8 +32,8 @@ public class testdriver2 {
         String type; 
         String password; 
         String phone_number;
-        String address;        
-
+        String address;
+    	User currentUser;
 
         String sql=null;
         int c=0;
@@ -75,27 +78,30 @@ public class testdriver2 {
                                  System.out.println("please enter an address:");
                                  while ((address = in.readLine()) == null && address.length() == 0);
 
-	            		 User user=new User();
-                                 user.createUser(name, username, Integer.parseInt(type), password, phone_number, address, con.stmt);
+	            		 currentUser = new User(name, username, Integer.parseInt(type), password, phone_number, address);
+                         currentUser.insertUser(con.stmt);
+                        
 	            	 }
 	            	 else if (c==2)
 	            	 {	 
-	            		 System.out.println("please enter your query below:");
-	            		 while ((sql = in.readLine()) == null && sql.length() == 0)
-	            			 System.out.println(sql);
-	            		 ResultSet rs=con.stmt.executeQuery(sql);
-	            		 ResultSetMetaData rsmd = rs.getMetaData();
-	            		 int numCols = rsmd.getColumnCount();
-	            		 while (rs.next())
-	            		 {
-	            			 //System.out.print("cname:");
-	            			 for (int i=1; i<=numCols;i++)
-	            				 System.out.print(rs.getString(i)+"  ");
-	            			 System.out.println("");
+	            		 String userName;
+	            		 String passWord;
+	            		 User authUser = new User();
+	            		 System.out.println("Please Enter User Name:");
+	            		 while ((userName = in.readLine()) == null && userName.length() == 0);
+	            		 
+	            		 System.out.println("Please Enter Password:");
+	            		 while ((passWord = in.readLine()) == null & passWord.length() == 0);
+	            		 authUser.populateUser(userName, con.stmt);
+	            		 if(authUser.getPassword().equals(passWord)){
+
+	            			 System.out.println("Authentication Successful");
 	            		 }
-	            		 System.out.println(" ");
-	            		 rs.close();
-	            	 }
+	            		 else{
+	            			 System.out.println("password entered = " + passWord + "Real PW: " + authUser.getPassword());
+	            			 System.out.println(passWord == authUser.getPassword());
+	            		 }
+	            	 } 
 	            	 else
 	            	 {   
 	            		 System.out.println("EoM");
