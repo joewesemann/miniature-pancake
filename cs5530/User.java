@@ -38,8 +38,7 @@ public class User {
 
 
 
-
-// todo: change to getUser.... 		
+	//populates user object variables from the table.	
 	public void populateUser(String username, Statement stmt) throws Exception
 	{
 		String query;
