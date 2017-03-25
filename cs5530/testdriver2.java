@@ -138,28 +138,28 @@ public class testdriver2 {
                                  System.out.println("Please enter the Housing ID of the house you want to reserve, or '0' to return to main menu: ");
                                  String housing_id = "";
                                  while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
-                                 if(housing_id == "0") {
+                                 if(Integer.parseInt(housing_id) == 0) {
                                      continue;
                                  }
 
                                  System.out.println("Please enter the start date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
                                  String housing_date_start = "";
                                  while ((housing_date_start = in.readLine()) == null && housing_date_start.length() == 0);
-                                 if(housing_date_start == "0") {
+                                 if(Integer.parseInt(housing_date_start) == 0) {
                                      continue;
                                  }
 
                                  System.out.println("Please enter the end date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
                                  String housing_date_end = "";
                                  while ((housing_date_end = in.readLine()) == null && housing_date_end.length() == 0);
-                                 if(housing_date_end == "0") {
+                                 if(Integer.parseInt(housing_date_end) == 0) {
                                      continue;
                                  }
 
                                  System.out.println("Please enter the number in your party, or '0' to return to main menu: ");
                                  String party = "";
                                  while ((party = in.readLine()) == null && party.length() == 0);
-                                 if(party == "0") {
+                                 if(Integer.parseInt(party) == 0) {
                                      continue;
                                  }
 
