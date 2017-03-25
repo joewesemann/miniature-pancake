@@ -7,19 +7,32 @@ import java.io.*;
 
 public class testdriver2 {
 
-	/**
-	 * @param args
-	 */
-
+        static String name;
+        static String username;
+        static String type;
+        static String password;
+        static String phone_number;
+        static String address;
+        static User currentUser;
+        static boolean loggedIn = false;
 	
 	public static void displayMenu()
 	{
 		 System.out.println("        Welcome to the Airbnb-like System     ");
-    	         System.out.println("1. create a user:");
+    	         System.out.println("1. Create a user:");
     	         System.out.println("2. Log-In");
-    	         System.out.println("3. exit:");
+    	         System.out.println("4. exit:");
     	         System.out.println("please enter your choice:");
 	}
+
+        public static void displayLoggedInMenu(User currentUser)
+        {
+
+                System.out.println("Hello " + currentUser.getName() + ": ");
+                System.out.println("1. Reserve Housing:");
+                System.out.println("2. exit:");
+                System.out.println("please enter your choice:");
+        }
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -27,19 +40,10 @@ public class testdriver2 {
 		Connector con=null;
 		String choice;
 
-        String name;
-        String username;
-        String type; 
-        String password; 
-        String phone_number;
-        String address;
-    	User currentUser;
-
         String sql=null;
         int c=0;
          try
 		 {
-			//remember to replace the password
 			 	 con= new Connector();
 	             System.out.println ("Database connection established");
 	         
@@ -80,6 +84,8 @@ public class testdriver2 {
 
 	            		 currentUser = new User(name, username, Integer.parseInt(type), password, phone_number, address);
                          currentUser.insertUser(con.stmt);
+                                 loggedIn = true;
+                                 break;
                         
 	            	 }
 	            	 else if (c==2)
@@ -95,7 +101,10 @@ public class testdriver2 {
 	            		 authUser.populateUser(userName, con.stmt);
 	            		 if(authUser.getPassword().equals(passWord)){
 
-	            			 System.out.println("Authentication Successful");
+	            			 System.out.println("Authentication Successful\n");
+                                         loggedIn = true;
+                                         currentUser = authUser;
+                                         break;
 	            		 }
 	            		 else{
 	            			 System.out.println("password entered = " + passWord + "Real PW: " + authUser.getPassword());
@@ -110,6 +119,32 @@ public class testdriver2 {
 	            		 break;
 	            	 }
 	             }
+
+
+                     while(loggedIn) {
+
+                         displayLoggedInMenu(currentUser);
+                         while ((choice = in.readLine()) == null && choice.length() == 0);
+                         try{
+                                 c = Integer.parseInt(choice);
+                         }catch (Exception e)
+                         {
+
+                                 continue;
+                         }
+                         if (c<1 | c>3)
+                                 continue;
+                         if (c==1)
+                         {
+                                 System.out.println("please kill me\n");
+                         }
+                         else 
+                         {
+                             con.stmt.close();
+                             break;
+                         }
+                     }
+
 		 }
          catch (Exception e)
          {
