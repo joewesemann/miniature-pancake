@@ -142,14 +142,14 @@ public class testdriver2 {
                                      continue;
                                  }
 
-                                 System.out.println("Please enter the start date you want to reserve for, or '0' to return to main menu: ");
+                                 System.out.println("Please enter the start date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
                                  String housing_date_start = "";
                                  while ((housing_date_start = in.readLine()) == null && housing_date_start.length() == 0);
                                  if(housing_date_start == "0") {
                                      continue;
                                  }
 
-                                 System.out.println("Please enter the end date you want to reserve for, or '0' to return to main menu: ");
+                                 System.out.println("Please enter the end date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
                                  String housing_date_end = "";
                                  while ((housing_date_end = in.readLine()) == null && housing_date_end.length() == 0);
                                  if(housing_date_end == "0") {
