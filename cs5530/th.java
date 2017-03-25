@@ -2,7 +2,7 @@ package cs5530;
 
 import java.sql.*;
 
-public class Th {
+public class th {
 	
     int hid;
     int user_id;
@@ -17,9 +17,9 @@ public class Th {
     int year_built;
     int telephone;
 	
-	public Th(){}
+	public th(){}
 
-	public Th(int hid, int user_id, String category, String name, String city, String state, int zip_code, String street_address, String url, String picture, int year_built, int telephone)
+	public th(int hid, int user_id, String category, String name, String city, String state, int zip_code, String street_address, String url, String picture, int year_built, int telephone)
 	{
 		setHid(hid);
 		setUserId(user_id);
