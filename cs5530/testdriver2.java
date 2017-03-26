@@ -147,6 +147,7 @@ public class testdriver2 {
 				else if (c==2)
 				{
 					createNewTH(currentUser, con.stmt);
+					System.out.println("Your new Property's ID is: " + currentTH.getHid());
 					continue;
                 }
                 else if(c == 3) 

@@ -40,9 +40,11 @@ public class User {
         try{
             int lastid;
             ResultSet result;
-            //result = stmt.executeQuery("select MAX(id) from user;");
-            //lastid = result.getInt("MAX(id)");
-            populateUser(username, stmt);
+            result = stmt.executeQuery("select last_insert_id() from user;");
+            while(result.next()){
+            	lastid = result.getInt("last_insert_id()");
+            	setId(lastid);	
+            }
         }
         catch(Exception e)
         {
