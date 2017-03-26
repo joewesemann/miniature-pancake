@@ -13,33 +13,33 @@ public class Keyword {
 	    this.language = language;
 	}
 
-    public void addWord(String word, String language, Statement stmt) {
-        this.word = word;
-        this.language = language;
-        String sql = "SELECT COUNT(*) FROM keyword WHERE word = " + word + ";";
+    public void addWord(Statement stmt) {
+        String sql = "SELECT COUNT(*) FROM keyword WHERE word = '" + word + "';";
         try{
+            int count = 0;
             ResultSet rs = stmt.executeQuery(sql);
             while(rs.next())
             {
-                if(rs.getInt("COUNT(*)") == 0)
-                {
-                    sql = "INSERT INTO keyword (word, language) VALUES ('"+ word +"', '"+ language +"');";
-                    stmt.executeUpdate(sql);
-                    int lastid;
-                    ResultSet result;
-                    result = stmt.executeQuery("select last_insert_id() from keyword;");
-                    while(result.next()){
-            	    lastid = result.getInt("last_insert_id()");
-            	    setId(lastid);
-                    }
+                count = rs.getInt("COUNT(*)");   
+            }
+            if(count == 0)
+            {
+                sql = "INSERT INTO keyword (word, language) VALUES ('"+ word +"', '"+ language +"');";
+                stmt.executeUpdate(sql);
+                int lastid;
+                ResultSet result;
+                result = stmt.executeQuery("select last_insert_id() from keyword;");
+                while(result.next()){
+        	        lastid = result.getInt("last_insert_id()");
+        	        setId(lastid);
                 }
-                else
-                {
-                    sql = "SELECT id FROM keyword WHERE word = " + word + ";";
-                    rs = stmt.executeQuery(sql);
-                    while(rs.next()){
-                        setId(rs.getInt("id"));
-                    }
+            }
+            else
+            {
+                sql = "SELECT id FROM keyword WHERE word = '" + word + "';";
+                rs = stmt.executeQuery(sql);
+                while(rs.next()){
+                    setId(rs.getInt("id"));
                 }
             }
         }

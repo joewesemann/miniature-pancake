@@ -187,6 +187,25 @@ public class testdriver2 {
          }
 	}
 	
+	// Method for adding Keywords
+	public static void addKeywords(th currentTH, Statement stmt) throws Exception
+	{
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		String word = "";
+		System.out.println("Enter keywords to associate with " + currentTH.getName() + " (empty line stop):");
+		while (true)
+		{
+			word = in.readLine();
+			if(word.isEmpty()) break;
+			else{
+				Keyword newkeyword = new Keyword(word, "english");
+				newkeyword.addWord(stmt);
+				Haskeyword haskey = new Haskeyword(currentTH.getHid(), newkeyword.getId());
+				haskey.add(stmt);
+			}
+		}
+	}
+	
 	// Method for favoriting housing
 	public static void favoriteTH(User currentUser, Statement stmt) throws Exception
 	{
@@ -295,6 +314,7 @@ public class testdriver2 {
 		
 		try{
 			currentTH.insertTh(stmt);
+			addKeywords(currentTH, stmt);
 		}
 		catch (Exception e)
         {
@@ -352,8 +372,9 @@ public class testdriver2 {
         	System.out.println("8.  Picture URL:    " + currentTH.getPicture());
 			System.out.println("9.  Year Built:     " + currentTH.getYearBuilt());
 			System.out.println("10. Telephone:      " + currentTH.getTelephone());
-			System.out.println("11. Save & exit");
-			System.out.println("12. Exit without Saving");
+			System.out.println("11. Add Key Words");
+			System.out.println("12. Save & exit");
+			System.out.println("13. Exit without Saving");
 			System.out.println("please enter your choice:");
         	
         	String choice;
@@ -364,7 +385,7 @@ public class testdriver2 {
 			{
 				continue;
 			}
-			if (c<1 | c>12)
+			if (c<1 | c>13)
 				continue;
 			if (c==1)
             {
@@ -437,6 +458,11 @@ public class testdriver2 {
                 continue;
             }
             else if(c == 11)
+            {
+            	addKeywords(currentTH, stmt);
+            	continue;
+            }
+            else if(c == 12)
             {
               	try{
 					currentTH.updateTH(stmt);
