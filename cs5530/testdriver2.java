@@ -83,7 +83,15 @@ public class testdriver2 {
         int uid = currentUser.getUserId();
         
         currentTH = new th(uid, category, name, city, state, Integer.parseInt(zip_code), street_address, url, picture, Integer.parseInt(year_built), telephone);
-		currentTH.insertTh(stmt);
+		
+		try{
+			currentTH.insertTh(stmt);
+		}
+		catch (Exception e)
+        {
+        	e.printStackTrace();
+        	System.err.println ("Error with query.");
+        }
     }
 	
 	public static void main(String[] args) {
@@ -192,7 +200,6 @@ public class testdriver2 {
                          else if (c==2)
                          {
                          	createNewTH(currentUser, con.stmt);
-                            break;
                          }
                          else 
                          {

@@ -50,9 +50,9 @@ public class th {
 
             int lastid;
             ResultSet result;
-            result = stmt.executeQuery("select last_insert_id() from th");
-            lastid = result.getInt("last_insert_id");
-            setHid(lastid);
+            result = stmt.executeQuery("SELECT hid FROM th ORDER BY hid DESC LIMIT 1;");
+            //lastid = result.getInt(1);
+            //setHid(lastid);
         }
         catch(Exception e)
         {

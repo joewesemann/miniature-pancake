@@ -38,8 +38,8 @@ public class User {
         try{
             int lastid;
             ResultSet result;
-            result = stmt.executeQuery("select last_insert_id() from schedule");
-            lastid = result.getInt("last_insert_id");
+            result = stmt.executeQuery("select MAX(uid) from user;");
+            lastid = result.getInt("MAX(uid)");
             setUserId(lastid);
         }
         catch(Exception e)
