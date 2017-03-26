@@ -35,13 +35,14 @@ public class testdriver2 {
 		System.out.println("3. Favorite a TH");
 		System.out.println("4. Edit existing TH");
 		System.out.println("5. Record stay during reservation");
-		System.out.println("6. exit:");
+                System.out.println("6. Give Feedback");
+                System.out.println("7. Rate Feedback");
+		System.out.println("8. exit:");
 		System.out.println("please enter your choice:");
     }
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("Example for cs5530");
 		Connector con=null;
 		String choice;
 
@@ -140,8 +141,6 @@ public class testdriver2 {
 				{
 					continue;
 				}
-				if (c<1 | c>6)
-					continue;
 				if (c==1)
                 {
                    	reserveTH(currentUser, con.stmt);
@@ -167,6 +166,14 @@ public class testdriver2 {
                 {
                 	recordStay(currentTH, currentUser, con.stmt);
                 	continue;
+                }
+                else if (c == 6)
+                {
+                	recordFeedback(currentUser, con.stmt);
+                }
+                else if (c == 7) 
+                {
+                	rateFeedback(currentUser, con.stmt);
                 }
                 else 
                 {
@@ -282,6 +289,45 @@ public class testdriver2 {
 			}
 		}
 	}
+
+        // method for rating feedback 
+        public static void rateFeedback(User currentUser, Statement stmt) throws Exception
+        {
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Please enter the Feedback ID of the feedback you would like to rate");
+                String feedback_id = "";
+                while ((feedback_id = in.readLine()) == null && feedback_id.length() == 0);
+
+                System.out.println("Please enter the rating for this feedback (0 = useless, 1 = useful, 2 = very useful): ");
+                String rating = "";
+                while ((rating = in.readLine()) == null && rating.length() == 0);
+
+
+                Rating ratingobj = new Rating(currentUser.getId(), Integer.parseInt(feedback_id), Integer.parseInt(rating));
+                ratingobj.create(stmt);
+                System.out.println("Successfully rated feedback. Thanks.");
+        } 
+
+        // method for giving feedback 
+        public static void recordFeedback(User currentUser, Statement stmt) throws Exception
+        {
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        	System.out.println("Please enter the Housing ID of the housing you would like to give feedback for: ");
+        	String housing_id = "";
+        	while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
+                
+                System.out.println("Please enter the rating for this housing (1 - 10): ");
+                String rating = "";
+                while ((rating = in.readLine()) == null && rating.length() == 0);
+
+                System.out.println("Please enter your feedback for this housing: ");
+                String text = "";
+                while ((text = in.readLine()) == null && text.length() == 0);
+
+        	Feedback feedback = new Feedback(Integer.parseInt(housing_id), Integer.parseInt(rating), currentUser.getId(), text);
+        	feedback.create(stmt);
+        	System.out.println("Successfully submitted feedback. Thanks.");
+        }
 	
 	// Method for favoriting housing
 	public static void favoriteTH(User currentUser, Statement stmt) throws Exception
