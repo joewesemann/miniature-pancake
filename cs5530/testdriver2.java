@@ -134,7 +134,7 @@ public class testdriver2 {
 					continue;
 				if (c==1)
                 {
-                   	reserveTH(currentUser, con.stmt)
+                   	reserveTH(currentUser, con.stmt);
                     continue;
 				}
 				else if (c==2)
@@ -175,46 +175,47 @@ public class testdriver2 {
 	}
 	
 	// Method for favoriting housing
-	public static void favoriteTH(User currentUser, Statement stmt)
+	public static void favoriteTH(User currentUser, Statement stmt) throws Exception
 	{
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         System.out.println("Please enter the Housing ID of the housing you would like to favorite: ");
         String housing_id_favorite = "";
         while ((housing_id_favorite = in.readLine()) == null && housing_id_favorite.length() == 0);
                               
         Favorites fav = new Favorites(Integer.parseInt(housing_id_favorite), currentUser.getId());
-        fav.add(con.stmt);
+        fav.add(stmt);
         System.out.println("Successfully added favorite. Thanks.");
 	}
 	
 	// Method for reserve housing
 	public static void reserveTH(User currentUser, Statement stmt) throws Exception
 	{
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		System.out.println("Please enter the Housing ID of the house you want to reserve, or '0' to return to main menu: ");
 		String housing_id = "";
 		while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
 		if(Integer.parseInt(housing_id) == 0) {
-			continue;
+			return;
 		}
-
 		System.out.println("Please enter the start date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
 		String housing_date_start = "";
 		while ((housing_date_start = in.readLine()) == null && housing_date_start.length() == 0);
 		if(housing_date_start.equals("0")) {
-			continue;
+			return;
 		}
 
 		System.out.println("Please enter the end date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
 		String housing_date_end = "";
 		while ((housing_date_end = in.readLine()) == null && housing_date_end.length() == 0);
 		if(housing_date_end.equals("0")) {
-			continue;
+			return;
 		}
 
 		System.out.println("Please enter the number in your party, or '0' to return to main menu: ");
 		String party = "";
 		while ((party = in.readLine()) == null && party.length() == 0);
 		if(Integer.parseInt(party) == 0) {
-			continue;
+			return;
 		}
                          
 		Reserve reserve = new Reserve(housing_date_start, housing_date_end, 0, currentUser.getId(), Integer.parseInt(housing_id), Integer.parseInt(party));
@@ -223,7 +224,7 @@ public class testdriver2 {
 		while ((confirm = in.readLine()) == null && confirm.length() == 0);
 
 		if(Integer.parseInt(confirm) == 0){
-			reserve.create(con.stmt);
+			reserve.create(stmt);
 			System.out.println("Your reservation was succesfully created. Thanks.");
 		}
 	}
