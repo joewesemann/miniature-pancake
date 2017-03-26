@@ -23,7 +23,9 @@ public class User {
 		this.phone_number = phone_number;
 		this.address = address;
 	}
+	
 
+	//inputs a new user into the database;
     public void insertUser(Statement stmt) {
     	String sql = "INSERT INTO user (name, username, type, password, phone_number, address) VALUES ('" + name + "', '" + username + "', " + type + ", '" + password + "', '" + phone_number + "', '" + address + "');";
         System.out.println("executing "+sql);
@@ -38,9 +40,9 @@ public class User {
         try{
             int lastid;
             ResultSet result;
-            result = stmt.executeQuery("select MAX(id) from user;");
-            lastid = result.getInt("MAX(id)");
-            setId(lastid);
+            //result = stmt.executeQuery("select MAX(id) from user;");
+            //lastid = result.getInt("MAX(id)");
+            populateUser(username, stmt);
         }
         catch(Exception e)
         {
@@ -76,6 +78,27 @@ public class User {
 			setAddress(results.getString("address"));
 		}
 	}
+	
+
+	//returns a boolean of whether the current username already exists in the server
+	public boolean usernameExists(String username, Statement stmt) throws Exception
+	{
+		String query = "SELECT count(*) AS number FROM user WHERE username = '" + username + "';";
+		int result = 0;
+		ResultSet results;
+		try{
+			results = stmt.executeQuery(query);
+		} catch(Exception e) {
+			System.err.println("Unable to execute query:"+query+"\n");
+			System.err.println(e.getMessage());
+			throw(e);
+		}
+		while(results.next()){
+			result = results.getInt("number");
+		}
+		return (result > 0);
+	}
+	
 	
 
 	//Getters and Setters

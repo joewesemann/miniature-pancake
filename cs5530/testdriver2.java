@@ -65,11 +65,18 @@ public class testdriver2 {
 					continue;
 				if (c==1)
 				{
+					User authUser = new User();
 					System.out.println("please enter a name:");
 					while ((name = in.readLine()) == null && name.length() == 0);
 
 					System.out.println("please enter a usernamename:");
 					while ((username = in.readLine()) == null && username.length() == 0);
+					if(authUser.usernameExists(username, con.stmt))
+					{
+						System.out.println("Username currently in use, returning to main menu.");
+						continue;
+					}
+					
 					
 					System.out.println("please enter a type (Regular: 1, Admin: 2):");
 					while ((type = in.readLine()) == null && type.length() == 0);
