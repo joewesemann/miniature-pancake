@@ -4,6 +4,7 @@ package cs5530;
 import java.lang.*;
 import java.sql.*;
 import java.io.*;
+import java.util.*;
 
 public class testdriver2 {
 
@@ -33,7 +34,8 @@ public class testdriver2 {
         System.out.println("2. Add new property");
 		System.out.println("3. Favorite a TH");
 		System.out.println("4. Edit existing TH");
-		System.out.println("5. exit:");
+		System.out.println("5. Record stay during reservation");
+		System.out.println("6. exit:");
 		System.out.println("please enter your choice:");
     }
 	
@@ -138,7 +140,7 @@ public class testdriver2 {
 				{
 					continue;
 				}
-				if (c<1 | c>5)
+				if (c<1 | c>6)
 					continue;
 				if (c==1)
                 {
@@ -154,10 +156,17 @@ public class testdriver2 {
                 else if(c == 3) 
                 {
 					favoriteTH(currentUser, con.stmt);
+					continue;
                 }
                 else if(c == 4)
                 {
                 	updateTH(currentUser, con.stmt);
+                	continue;
+                }
+                else if(c == 5)
+                {
+                	recordStay(currentTH, currentUser, con.stmt);
+                	continue;
                 }
                 else 
                 {
@@ -185,6 +194,74 @@ public class testdriver2 {
         		 catch (Exception e) { /* ignore close errors */ }
         	 }	 
          }
+	}
+	
+	// Method for recording stays
+	public static void recordStay(th currentTH, User currentUser, Statement stmt) throws Exception
+	{
+		boolean proceed = true;
+		ArrayList<Visit> visitsToAdd = new ArrayList<Visit>();
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		while(proceed)
+		{
+			System.out.println("Please enter reservation number for your stay (stay will not be recorded without valid reservation):");
+			String resId = "";
+			while ((resId = in.readLine()) == null && resId.length() == 0);
+		
+			System.out.println("Please enter first day in form YYYY-MM-DD for your stay:");
+			String from = "";
+			while ((from = in.readLine()) == null && from.length() == 0);
+			
+			System.out.println("Please enter last day of your stay in form YYYY-MM-DD:");
+			String to = "";
+			while ((to = in.readLine()) == null && to.length() == 0);
+			
+			visitsToAdd.add(new Visit(Integer.parseInt(resId), from, to));
+			
+			System.out.println("\n\nYour stays:");
+			for(Visit v : visitsToAdd)
+			{
+				System.out.println("Reservation ID: " + v.getReserveId());
+				System.out.println("Staying from: " + v.getFrom());
+				System.out.println("Staying to: " + v.getTo());
+		        System.out.println();
+			}
+			
+			System.out.println("What would you like to do?");
+			System.out.println("1. Add additional stay");
+			System.out.println("2. Confirm Stays and exit");
+			System.out.println("3. Exit without saving");
+			
+			String choice;
+			int c = 0;
+        	while ((choice = in.readLine()) == null && choice.length() == 0);
+			try{
+				c = Integer.parseInt(choice);
+			}catch (Exception e)
+			{
+				continue;
+			}
+			if (c<1 | c>2)
+				continue;
+			if (c==1)
+            {
+                continue;
+			}
+			else if (c==2)
+			{
+				for(Visit v : visitsToAdd)
+				{
+					//TODO: Check to see if stays are within reservation periods.
+					v.add(stmt);
+				}
+				break;
+            }
+            else 
+            {
+            	break;
+            }
+		}
 	}
 	
 	// Method for adding Keywords
