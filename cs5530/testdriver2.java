@@ -22,7 +22,7 @@ public class testdriver2 {
 		System.out.println("        Welcome to the Airbnb-like System     ");
 		System.out.println("1. Create a user:");
 		System.out.println("2. Log-In");
-		System.out.println("4. exit:");
+		System.out.println("3. exit:");
 		System.out.println("please enter your choice:");
 	}
 
@@ -32,7 +32,8 @@ public class testdriver2 {
         System.out.println("1. Reserve Housing:");
         System.out.println("2. Add new property");
 		System.out.println("3. Favorite a TH");
-		System.out.println("4. exit:");
+		System.out.println("4. Edit existing TH");
+		System.out.println("5. exit:");
 		System.out.println("please enter your choice:");
     }
 	
@@ -137,7 +138,7 @@ public class testdriver2 {
 				{
 					continue;
 				}
-				if (c<1 | c>4)
+				if (c<1 | c>5)
 					continue;
 				if (c==1)
                 {
@@ -153,6 +154,10 @@ public class testdriver2 {
                 else if(c == 3) 
                 {
 					favoriteTH(currentUser, con.stmt);
+                }
+                else if(c == 4)
+                {
+                	updateTH(currentUser, con.stmt);
                 }
                 else 
                 {
@@ -295,6 +300,158 @@ public class testdriver2 {
         {
         	e.printStackTrace();
         	System.err.println ("Error with query.");
+        }
+    }
+    
+    // Method to update TH values to the database
+	public static void updateTH(User currentUser, Statement stmt) throws Exception
+    {
+        String category;
+        String name;
+        String city;
+        String state;
+        String zip_code;
+		String street_address;
+		String url;
+		String picture;
+		String year_built;
+		String telephone;
+		String hid;
+		
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Enter Housing ID# of the property you wish to edit: ");
+        while ((hid = in.readLine()) == null && hid.length() == 0);
+        try{
+        	currentTH = new th();
+        	currentTH.populateTH(Integer.parseInt(hid), stmt);
+        	if(currentTH.getUserID() != currentUser.getId())
+        	{
+        		System.out.println("You do not own this property");
+        		System.out.println(currentTH.getUserID() + " " + currentUser.getId());
+        		return;
+        	}
+        } catch(Exception e){
+        	System.err.println("Error looking up housing ID with given ID#");
+        	return;
+        }
+        
+ 
+        
+        int c = 0;
+        
+        while(true){
+            System.out.println("Hello " + currentUser.getName() + ", update which of the following for ID#: " + currentTH.getHid() + "?");
+			System.out.println("1.  Category:       " + currentTH.getCategory());
+        	System.out.println("2.  Name:           " + currentTH.getName());
+			System.out.println("3.  Street Address: " + currentTH.street_address);
+			System.out.println("4.  City:           " + currentTH.getCity());
+        	System.out.println("5.  State:          " + currentTH.getState());
+			System.out.println("6.  Zip Code:       " + currentTH.getZipCode());
+			System.out.println("7.  URL:            " + currentTH.getURL());
+        	System.out.println("8.  Picture URL:    " + currentTH.getPicture());
+			System.out.println("9.  Year Built:     " + currentTH.getYearBuilt());
+			System.out.println("10. Telephone:      " + currentTH.getTelephone());
+			System.out.println("11. Save & exit");
+			System.out.println("12. Exit without Saving");
+			System.out.println("please enter your choice:");
+        	
+        	String choice;
+        	while ((choice = in.readLine()) == null && choice.length() == 0);
+			try{
+				c = Integer.parseInt(choice);
+			}catch (Exception e)
+			{
+				continue;
+			}
+			if (c<1 | c>12)
+				continue;
+			if (c==1)
+            {
+			System.out.println("please enter new Category:");
+				while ((category = in.readLine()) == null && category.length() == 0);
+				currentTH.setCategory(category);
+                continue;
+			}
+			else if (c==2)
+			{
+				System.out.println("please enter new Name:");
+				while ((name = in.readLine()) == null && name.length() == 0);
+				currentTH.setName(name);
+                continue;
+            }
+            else if(c == 3) 
+            {
+				System.out.println("please enter new Street Address:");
+				while ((street_address = in.readLine()) == null && street_address.length() == 0);
+				currentTH.setStreetAddress(street_address);
+				continue;
+			}
+			else if(c == 4)
+			{
+			System.out.println("please enter new City:");
+			while ((city = in.readLine()) == null && city.length() == 0);
+				currentTH.setCity(city);
+                continue;
+            }
+            else if(c == 5)
+            {
+            	System.out.println("please enter new State:");
+				while ((state = in.readLine()) == null && state.length() == 0);
+				currentTH.setState(state);
+                continue;
+            }
+            else if(c == 6)
+            {
+             	System.out.println("please enter new Zip Code:");
+				while ((zip_code = in.readLine()) == null && zip_code.length() == 0);
+				currentTH.setZipCode(Integer.parseInt(zip_code));
+                continue;
+            }
+            else if(c == 7)
+            {
+               	System.out.println("please enter new URL:");
+				while ((url = in.readLine()) == null && url.length() == 0);
+				currentTH.setUrl(url);
+                continue;
+            }
+            else if(c == 8)
+            {
+              	System.out.println("please enter new Picture URL:");
+				while ((picture = in.readLine()) == null && picture.length() == 0);
+				currentTH.setPicture(picture);
+                continue;
+            }
+            else if(c == 9)
+            {
+              	System.out.println("please enter new Year Built:");
+				while ((year_built = in.readLine()) == null && year_built.length() == 0);
+				currentTH.setYearBuilt(Integer.parseInt(year_built));
+                continue;
+            }
+            else if(c == 10)
+            {
+              	System.out.println("please enter new Telephone #:");
+				while ((telephone = in.readLine()) == null && telephone.length() == 0);
+				currentTH.setTelephone(telephone);
+                continue;
+            }
+            else if(c == 11)
+            {
+              	try{
+					currentTH.updateTH(stmt);
+				}
+				catch (Exception e)
+        		{
+        			e.printStackTrace();
+        			System.err.println ("Error with query.");
+        		}
+                break;
+            }
+            else 
+            {
+            	break;
+            }
         }
     }
 }
