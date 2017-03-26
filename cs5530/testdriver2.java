@@ -37,7 +37,8 @@ public class testdriver2 {
 		System.out.println("5. Record stay during reservation");
                 System.out.println("6. Give Feedback");
                 System.out.println("7. Rate Feedback");
-		System.out.println("8. exit:");
+                System.out.println("8. Mark user as trusted");
+		System.out.println("9. exit:");
 		System.out.println("please enter your choice:");
     }
 	
@@ -175,6 +176,10 @@ public class testdriver2 {
                 {
                 	rateFeedback(currentUser, con.stmt);
                 }
+                else if (c == 8) 
+                { 
+                	trustUser(currentUser, con.stmt);
+                }
                 else 
                 {
                     con.stmt.close();
@@ -289,6 +294,19 @@ public class testdriver2 {
 			}
 		}
 	}
+
+        // method for marking a user as trusted
+        public static void trustUser(User currentUser, Statement stmt) throws Exception
+        {
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Please enter the ID of the user that you want to mark as trusted: ");
+                String trusted_id = "";
+                while ((trusted_id = in.readLine()) == null && trusted_id.length() == 0);
+
+                Trust trust = new Trust(currentUser.getId(), Integer.parseInt(trusted_id));
+                trust.create(stmt);
+                System.out.println("Successfully marked user as trusted. Thanks.");
+        }
 
         // method for rating feedback 
         public static void rateFeedback(User currentUser, Statement stmt) throws Exception
