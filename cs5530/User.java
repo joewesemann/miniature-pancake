@@ -8,7 +8,6 @@ public class User {
 	String name;
 	String username;
 	int type;
-	int uid;
 	String password;
 	String phone_number;
 	String address;
@@ -41,7 +40,7 @@ public class User {
             ResultSet result;
             result = stmt.executeQuery("select MAX(id) from user;");
             lastid = result.getInt("MAX(id)");
-            setUserId(lastid);
+            setId(lastid);
         }
         catch(Exception e)
         {
@@ -78,23 +77,15 @@ public class User {
 		}
 	}
 	
-    public void setId(int id){
-    	this.id = id;
-    }
 
 	//Getters and Setters
-	public void setUserId(int uid){
-		this.uid = uid;
+	public void setId(int id){
+		this.id = id;
 	}
 	
-	public int getUserId(){
-		return this.uid;
+	public int getId(){
+		return this.id;
 	}
-	
-
-        public int getId(){ 
-               return this.id;
-        }
 
 	public void setName(String name){
 		this.name = name;

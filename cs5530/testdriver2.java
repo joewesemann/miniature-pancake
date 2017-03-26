@@ -35,66 +35,6 @@ public class testdriver2 {
 		System.out.println("4. exit:");
 		System.out.println("please enter your choice:");
     }
-    
-    public static void createNewTH(User currentUser, Statement stmt) throws Exception
-    {
-        String category;
-        String name;
-        String city;
-        String state;
-        String zip_code;
-		String street_address;
-		String url;
-		String picture;
-		String year_built;
-		String telephone;
-		
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-                         	
-		System.out.println("please enter a Property Name:");
-		while ((name = in.readLine()) == null && name.length() == 0);
-
-		System.out.println("please enter category:");
-		while ((category = in.readLine()) == null && category.length() == 0);
-	            			
-		System.out.println("please enter a Street Address:");
-		while ((street_address = in.readLine()) == null && street_address.length() == 0);
-
-        System.out.println("please enter the property's city:");
-        while ((city = in.readLine()) == null && city.length() == 0);
-                               
-        System.out.println("Please enter the property's State:");
-        while ((state = in.readLine()) == null && state.length() == 0);
-
-
-        System.out.println("please enter the property's ZIP code:");
-        while ((zip_code = in.readLine()) == null && zip_code.length() == 0);
-                               
-        System.out.println("Please enter the property's URL:");
-        while ((url = in.readLine()) == null && url.length() == 0);
-
-        System.out.println("please enter a URL for the property's picture:");
-        while ((picture = in.readLine()) == null && picture.length() == 0);
-                               
-        System.out.println("Please enter the year the property was built:");
-        while ((year_built = in.readLine()) == null && year_built.length() == 0);
-
-        System.out.println("please enter the telephone number for the property:");
-        while ((telephone = in.readLine()) == null && telephone.length() == 0);
-        
-        int uid = currentUser.getUserId();
-        
-        currentTH = new th(uid, category, name, city, state, Integer.parseInt(zip_code), street_address, url, picture, Integer.parseInt(year_built), telephone);
-		
-		try{
-			currentTH.insertTh(stmt);
-		}
-		catch (Exception e)
-        {
-        	e.printStackTrace();
-        	System.err.println ("Error with query.");
-        }
-    }
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -181,78 +121,37 @@ public class testdriver2 {
 			}
 
 
-				while(loggedIn) {
-					displayLoggedInMenu(currentUser);
-					while ((choice = in.readLine()) == null && choice.length() == 0);
-					try{
-						c = Integer.parseInt(choice);
-					}catch (Exception e)
-					{
-						continue;
-					}
-					if (c<1 | c>4)
+			while(loggedIn) {
+				displayLoggedInMenu(currentUser);
+				while ((choice = in.readLine()) == null && choice.length() == 0);
+				try{
+					c = Integer.parseInt(choice);
+				}catch (Exception e)
+				{
 					continue;
-					if (c==1)
-                    {
-						System.out.println("Please enter the Housing ID of the house you want to reserve, or '0' to return to main menu: ");
-						String housing_id = "";
-						while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
-						if(Integer.parseInt(housing_id) == 0) {
-							continue;
-						}
-
-						System.out.println("Please enter the start date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
-						String housing_date_start = "";
-						while ((housing_date_start = in.readLine()) == null && housing_date_start.length() == 0);
-						if(housing_date_start.equals("0")) {
-							continue;
-						}
-
-						System.out.println("Please enter the end date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
-						String housing_date_end = "";
-						while ((housing_date_end = in.readLine()) == null && housing_date_end.length() == 0);
-						if(housing_date_end.equals("0")) {
-							continue;
-						}
-
-						System.out.println("Please enter the number in your party, or '0' to return to main menu: ");
-						String party = "";
-						while ((party = in.readLine()) == null && party.length() == 0);
-						if(Integer.parseInt(party) == 0) {
-							continue;
-						}
-                         
-                        Reserve reserve = new Reserve(housing_date_start, housing_date_end, 0, currentUser.getId(), Integer.parseInt(housing_id), Integer.parseInt(party));
-                        System.out.println("Are you sure you want to reserve this house from " + housing_date_start + " until " + housing_date_end + "? (0 for yes, 1 for no)");
-                        String confirm = "";
-                        while ((confirm = in.readLine()) == null && confirm.length() == 0);
-
-                        if(Integer.parseInt(confirm) == 0){
-                        	reserve.create(con.stmt);
-                            System.out.println("Your reservation was succesfully created. Thanks.");
-                        }
-                        continue;
-					}
-					else if (c==2)
-					{
-						createNewTH(currentUser, con.stmt);
-                    }
-                    else if(c == 3) 
-                         {
-                                 System.out.println("Please enter the Housing ID of the housing you would like to favorite: ");
-                                 String housing_id_favorite = "";
-                                 while ((housing_id_favorite = in.readLine()) == null && housing_id_favorite.length() == 0);
-                                 
-                                 Favorites fav = new Favorites(Integer.parseInt(housing_id_favorite), currentUser.getId());
-                                 fav.add(con.stmt);
-                                 System.out.println("Successfully added favorite. Thanks.");
-                         }
-                         else 
-                         {
-                                 con.stmt.close();
-                                 break;
-                         }
-                     }
+				}
+				if (c<1 | c>4)
+					continue;
+				if (c==1)
+                {
+                   	reserveTH(currentUser, con.stmt)
+                    continue;
+				}
+				else if (c==2)
+				{
+					createNewTH(currentUser, con.stmt);
+					continue;
+                }
+                else if(c == 3) 
+                {
+					favoriteTH(currentUser, con.stmt);
+                }
+                else 
+                {
+                    con.stmt.close();
+                    break;
+                }
+            }
 
 		 }
          catch (Exception e)
@@ -274,4 +173,119 @@ public class testdriver2 {
         	 }	 
          }
 	}
+	
+	// Method for favoriting housing
+	public static void favoriteTH(User currentUser, Statement stmt)
+	{
+        System.out.println("Please enter the Housing ID of the housing you would like to favorite: ");
+        String housing_id_favorite = "";
+        while ((housing_id_favorite = in.readLine()) == null && housing_id_favorite.length() == 0);
+                              
+        Favorites fav = new Favorites(Integer.parseInt(housing_id_favorite), currentUser.getId());
+        fav.add(con.stmt);
+        System.out.println("Successfully added favorite. Thanks.");
+	}
+	
+	// Method for reserve housing
+	public static void reserveTH(User currentUser, Statement stmt) throws Exception
+	{
+		System.out.println("Please enter the Housing ID of the house you want to reserve, or '0' to return to main menu: ");
+		String housing_id = "";
+		while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
+		if(Integer.parseInt(housing_id) == 0) {
+			continue;
+		}
+
+		System.out.println("Please enter the start date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
+		String housing_date_start = "";
+		while ((housing_date_start = in.readLine()) == null && housing_date_start.length() == 0);
+		if(housing_date_start.equals("0")) {
+			continue;
+		}
+
+		System.out.println("Please enter the end date you want to reserve for e.g. '2017-01-01', or '0' to return to main menu: ");
+		String housing_date_end = "";
+		while ((housing_date_end = in.readLine()) == null && housing_date_end.length() == 0);
+		if(housing_date_end.equals("0")) {
+			continue;
+		}
+
+		System.out.println("Please enter the number in your party, or '0' to return to main menu: ");
+		String party = "";
+		while ((party = in.readLine()) == null && party.length() == 0);
+		if(Integer.parseInt(party) == 0) {
+			continue;
+		}
+                         
+		Reserve reserve = new Reserve(housing_date_start, housing_date_end, 0, currentUser.getId(), Integer.parseInt(housing_id), Integer.parseInt(party));
+		System.out.println("Are you sure you want to reserve this house from " + housing_date_start + " until " + housing_date_end + "? (0 for yes, 1 for no)");
+		String confirm = "";
+		while ((confirm = in.readLine()) == null && confirm.length() == 0);
+
+		if(Integer.parseInt(confirm) == 0){
+			reserve.create(con.stmt);
+			System.out.println("Your reservation was succesfully created. Thanks.");
+		}
+	}
+	
+	// Method to add a new TH to the database
+	public static void createNewTH(User currentUser, Statement stmt) throws Exception
+    {
+        String category;
+        String name;
+        String city;
+        String state;
+        String zip_code;
+		String street_address;
+		String url;
+		String picture;
+		String year_built;
+		String telephone;
+		
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                         	
+		System.out.println("please enter a Property Name:");
+		while ((name = in.readLine()) == null && name.length() == 0);
+
+		System.out.println("please enter category:");
+		while ((category = in.readLine()) == null && category.length() == 0);
+	            			
+		System.out.println("please enter a Street Address:");
+		while ((street_address = in.readLine()) == null && street_address.length() == 0);
+
+        System.out.println("please enter the property's city:");
+        while ((city = in.readLine()) == null && city.length() == 0);
+                               
+        System.out.println("Please enter the property's State:");
+        while ((state = in.readLine()) == null && state.length() == 0);
+
+
+        System.out.println("please enter the property's ZIP code:");
+        while ((zip_code = in.readLine()) == null && zip_code.length() == 0);
+                               
+        System.out.println("Please enter the property's URL:");
+        while ((url = in.readLine()) == null && url.length() == 0);
+
+        System.out.println("please enter a URL for the property's picture:");
+        while ((picture = in.readLine()) == null && picture.length() == 0);
+                               
+        System.out.println("Please enter the year the property was built:");
+        while ((year_built = in.readLine()) == null && year_built.length() == 0);
+
+        System.out.println("please enter the telephone number for the property:");
+        while ((telephone = in.readLine()) == null && telephone.length() == 0);
+        
+        int uid = currentUser.getId();
+        
+        currentTH = new th(uid, category, name, city, state, Integer.parseInt(zip_code), street_address, url, picture, Integer.parseInt(year_built), telephone);
+		
+		try{
+			currentTH.insertTh(stmt);
+		}
+		catch (Exception e)
+        {
+        	e.printStackTrace();
+        	System.err.println ("Error with query.");
+        }
+    }
 }
