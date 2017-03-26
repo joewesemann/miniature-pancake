@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class User {
 	
-        int id;
+    int id;
 	String name;
 	String username;
 	int type;
@@ -39,8 +39,8 @@ public class User {
         try{
             int lastid;
             ResultSet result;
-            result = stmt.executeQuery("select MAX(uid) from user;");
-            lastid = result.getInt("MAX(uid)");
+            result = stmt.executeQuery("select MAX(id) from user;");
+            lastid = result.getInt("MAX(id)");
             setUserId(lastid);
         }
         catch(Exception e)
@@ -68,7 +68,7 @@ public class User {
 	       }
 		System.out.println("User.getUser Query = "+query+"\n");
 		while (results.next()){
-                        setId(results.getInt("id"));
+            setId(results.getInt("id"));
 			setName(results.getString("name"));
 			setUsername(results.getString("username"));
 			setType(results.getInt("type"));
@@ -78,9 +78,9 @@ public class User {
 		}
 	}
 	
-        public void setId(int id){
-                this.id = id;
-        }
+    public void setId(int id){
+    	this.id = id;
+    }
 
 	//Getters and Setters
 	public void setUserId(int uid){
