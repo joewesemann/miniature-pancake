@@ -61,6 +61,21 @@ public class th {
             e.printStackTrace();
         }
     }
+    
+    //update housing database to current values
+    public void updateTH(Statement stmt){
+            	String sql = "UPDATE th SET category = '" + getCategory() + "', name = '" + getName() + "', city = '" + getCity() + "', state = '" + getState() + "', zip_code = " + getZipCode() + ", street_address = '" + getStreetAddress() +
+            	                "', url = '" + getURL() + "', picture = '" + getPicture() + "', year_built = " + getYearBuilt() + ", telephone = '" + getTelephone() + "' WHERE hid = " + getHid() + ";";
+        System.out.println("executing "+sql);
+        try{
+        	stmt.executeUpdate(sql);
+        }
+        catch(Exception e)
+        {
+        	System.out.println("cannot execute the query");
+            e.printStackTrace();
+        }
+    }
 
 
     // Populate TH from table using hid
