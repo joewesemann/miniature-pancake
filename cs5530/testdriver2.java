@@ -201,7 +201,7 @@ public class testdriver2 {
                 }
                 else if (c == 12) 
                 {
-                        viewHighlyRated(con.stmt);
+                    viewHighlyRated(con.stmt);
                 }
                 else if (c == 13)
                 {
@@ -445,6 +445,16 @@ public class testdriver2 {
                 System.out.println("Please enter the Feedback ID of the feedback you would like to rate");
                 String feedback_id = "";
                 while ((feedback_id = in.readLine()) == null && feedback_id.length() == 0);
+                
+                String sql = "SELECT user_id from feedback WHERE id = " + feedback_id + ";";
+                ResultSet rs = stmt.executeQuery(sql);
+                while(rs.next())
+                {
+                	if(rs.getInt("user_id") == currentUser.getId())
+                	{
+                		System.out.println("Cannot enter rating for your own feedback");
+                	}
+                }
 
                 System.out.println("Please enter the rating for this feedback (0 = useless, 1 = useful, 2 = very useful): ");
                 String rating = "";
@@ -492,7 +502,7 @@ public class testdriver2 {
         // method for giving feedback 
         public static void recordFeedback(User currentUser, Statement stmt) throws Exception
         {
-                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         	System.out.println("Please enter the Housing ID of the housing you would like to give feedback for: ");
         	String housing_id = "";
         	while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
