@@ -38,7 +38,8 @@ public class testdriver2 {
                 System.out.println("6. Give Feedback");
                 System.out.println("7. Rate Feedback");
                 System.out.println("8. Mark user as trusted");
-		System.out.println("9. exit:");
+                System.out.println("9. Browse Housing");
+		System.out.println("10. exit:");
 		System.out.println("please enter your choice:");
     }
 	
@@ -180,6 +181,10 @@ public class testdriver2 {
                 { 
                 	trustUser(currentUser, con.stmt);
                 }
+                else if (c == 9)
+                {
+                        browseTh(currentUser, con.stmt);
+                }
                 else 
                 {
                     con.stmt.close();
@@ -294,6 +299,51 @@ public class testdriver2 {
 			}
 		}
 	}
+
+        // search TH's
+        public static void browseTh(User currentUser, Statement stmt) throws Exception
+        {
+                System.out.println("Welcome to the housing browser. Enter the following criteria. Anything you don't fill out will not be considered in the search. (Skip any fields by leaving them blank and pressing enter)");
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Please enter the min price range (e.g. 100.00): ");
+                String min_price = "";
+                while ((min_price = in.readLine()) == null && min_price.length() == 0);
+
+                System.out.println("Please enter the max price range (e.g. 100.00): ");
+                String max_price = "";
+                while ((max_price = in.readLine()) == null && max_price.length() == 0);
+
+                System.out.println("Please enter city: ");
+                String city = "";
+                while ((city = in.readLine()) == null && city.length() == 0);
+
+                System.out.println("Please enter state: ");
+                String state = "";
+                while ((state = in.readLine()) == null && state.length() == 0);
+
+                System.out.println("Please enter category: ");
+                String category = "";
+                while ((category = in.readLine()) == null && category.length() == 0);
+
+                System.out.println("Please enter keywords to search by (enter multiple by seperating them by a space and pressing enter when finished): ");
+                String keywords_string = "";
+                while ((keywords_string = in.readLine()) == null && keywords_string.length() == 0);
+                String[] keywords = keywords_string.split(" ");
+
+                System.out.println("How would you like to sort the results (1 = by price, 2 = by average rating): ");
+                String sort = "";
+                while ((sort = in.readLine()) == null && sort.length() == 0);
+
+                th th = new th();
+                ResultSet rst = th.complexSearch(min_price, max_price, city, state, category, keywords, sort, stmt);
+
+                System.out.println("hid     category     name     city     state     address     price     avg_rating");
+
+                while(rst.next()){
+                   System.out.println(rst.getInt("r.hid") + "     " +  rst.getString("r.category") + "     " + rst.getString("r.name") + "     " + rst.getString("r.city")+ "     " + rst.getString("r.state")+ "     " + rst.getString("r.street_address") + "     " + rst.getString("r.price")+ "     " + rst.getString("feedback.avg_rating"));
+                }
+        }
 
         // method for marking a user as trusted
         public static void trustUser(User currentUser, Statement stmt) throws Exception

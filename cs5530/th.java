@@ -34,6 +34,140 @@ public class th {
 		setTelephone(telephone);
 	}
 
+    public ResultSet complexSearch(String min_price, String max_price, String city, String state, String category, String[] keywords, String sort, Statement stmt) {
+
+        String query = ""; 
+
+        /* handle a keywords search (THE BEAST QUERY) */
+        if(keywords.length != 0 && !keywords[0].isEmpty()){
+            query = " SELECT " + 
+                     "  r.hid," + 
+                     " r.category, " +
+                     " r.name, " +
+                     " r.city, " +
+                     " r.state," +
+                     " r.street_address," +
+                     " r.price," +
+                     " feedback.avg_rating" +
+                     " FROM (" +
+                      "  SELECT *" +
+                      "  FROM (" +
+                      "    SELECT a.th_id" +
+                      "    FROM (" +
+                      "        SELECT hk.th_id, k.word " +
+                      "        FROM keyword k " +
+                      "        JOIN has_keywords hk " +
+                      "        on k.id = hk.keyword_id " +
+                      "    ) a " +
+                      "    WHERE LOWER(a.word) IN (";
+
+                      for(int i = 0; i < keywords.length; i++){
+                          
+                          query += "'" + keywords[i].toLowerCase() + "'";
+                          if(i != keywords.length -1)
+                              query += ",";
+                      }
+
+
+                      query += ") " +
+                      "    GROUP BY a.th_id " +
+                      "  ) b " +
+                      "  JOIN th t " +
+                      "  ON t.hid = b.th_id " +
+                      " ) r " +
+
+                      "JOIN ( " +
+                      "  SELECT th_id, AVG(rating) as avg_rating " +
+                      "  FROM feedback " +
+                      "  GROUP BY th_id " +
+                      ") feedback " +
+                      "ON r.hid = feedback.th_id " +
+
+                      "WHERE 1=1 ";
+ 
+                      if(!city.isEmpty()){
+                          query += " AND r.city LIKE '%" + city + "%'";
+                      }
+
+                      if(!state.isEmpty()){
+                          query += " AND r.state LIKE '%" + state + "%'";
+                      }
+
+                      if(!category.isEmpty()){
+                          query += " AND r.category LIKE '%" + category + "%'";
+                      }
+
+                      if(!max_price.isEmpty()){
+                          query += " AND r.price <= " + max_price;
+                      }
+
+                      if(!min_price.isEmpty()){
+                          query += " AND r.price >= " + min_price;
+                      }
+
+                      if(sort.equals("2")){
+                          query += " ORDER BY feedback.avg_rating;";
+                      } else {
+                          query += " ORDER BY feedback.avg_rating;";
+                      }
+        } else {
+
+                query = " SELECT " +
+                     "  r.hid," +
+                     " r.category, " +
+                     " r.name, " +
+                     " r.city, " +
+                     " r.state," +
+                     " r.street_address," +
+                     " r.price," +
+                     " feedback.avg_rating" +
+                     " FROM th r" +
+                     " LEFT JOIN ( " +
+                     " SELECT th_id, AVG(rating) as avg_rating " +
+                     "  FROM feedback " +
+                     "  GROUP BY th_id " +
+                     " ) feedback " +
+                     " ON r.hid = feedback.th_id " +
+                     
+                     "WHERE 1=1 ";
+
+                      if(!city.isEmpty()){
+                          query += " AND r.city LIKE '%" + city + "%'";
+                      }
+
+                      if(!state.isEmpty()){
+                          query += " AND r.state LIKE '%" + state + "%'";
+                      }
+
+                      if(!category.isEmpty()){
+                          query += " AND r.category LIKE '%" + category + "%'";
+                      }
+
+                      if(!max_price.isEmpty()){
+                          query += " AND r.price <= " + max_price;
+                      }
+
+                      if(!min_price.isEmpty()){
+                          query += " AND r.price >= " + min_price;
+                      }
+
+                      if(sort.equals("2")){
+                          query += " ORDER BY feedback.avg_rating;";
+                      } else {
+                          query += " ORDER BY feedback.avg_rating;";
+                      }
+        }
+
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public void insertTh(Statement stmt) {
     	String sql = "INSERT INTO th (user_id, category, name, city, state, zip_code, street_address, url, picture, year_built, telephone) " + 
     	             "VALUES (" + user_id + ", '" + category + "', '" + name + "', '" + city + "', '" + state + "', " + zip_code + ", '" + street_address + "', '" + url + "', '" + picture + "', " + year_built + ", '" + telephone + "');";
