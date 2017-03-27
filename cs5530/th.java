@@ -36,6 +36,20 @@ public class th {
 		setPrice(price);
 	}
 
+    public ResultSet viewTopFeedback(String limit, String housing_id, Statement stmt) {
+
+        String query = "select r.th_id as hid, r.text as feedback, r.rating as rating, `AVG(rating)` as usefulness_score from (select * from feedback join (select feedback_id, AVG(rating)  from rating group by feedback_id) r ON feedback.id = r.feedback_id) r where r.th_id =" + housing_id + " LIMIT " + limit + ";";
+
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public ResultSet viewMostPopular(Statement stmt) {
 
         String query = "select  a.name, max(stay_count) as stay_count, category from ( select  count(r.th_id) as stay_count,  r.th_id as hid,  th.category as category, th.name as name from reserve r  join visit v on v.reserve_id = r.id  join th on th.hid = r.th_id  group by r.th_id, th.category  ) a group by a.category, a.hid limit 5;";

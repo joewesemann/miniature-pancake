@@ -44,7 +44,8 @@ public class testdriver2 {
         System.out.println("12. View highly rated housing by category: ");
         System.out.println("13. (ADMIN) View Top Trusted Users");
         System.out.println("14. (ADMIN) View top useful Users");
-		System.out.println("15. exit:");
+        System.out.println("15. View top feedback for a particular housing: ");
+		System.out.println("16. exit:");
 		System.out.println("please enter your choice:");
 
     }
@@ -210,6 +211,10 @@ public class testdriver2 {
                 else if (c == 14)
                 {
                 	topMUseful(con.stmt);
+                }
+                else if (c == 15) 
+                {
+                        viewTopFeedback(con.stmt);
                 }
                 else 
                 {
@@ -485,6 +490,28 @@ public class testdriver2 {
                 System.out.println("name               stay_count        category");
                 while(rst.next()){
                    System.out.println(rst.getString("a.name") + "     " +  rst.getString("stay_count") + "     " + rst.getString("category"));
+                }
+        }
+
+        public static void viewTopFeedback(Statement stmt) throws Exception
+        {
+
+                BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+                System.out.println("Please enter the Housing ID of the housing you would like to view top feedback for: ");
+                String housing_id = "";
+                while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
+
+                System.out.println("Please enter the number of feedbacks you would like to limit by: ");
+                String limit = "";
+                while ((limit = in.readLine()) == null && limit.length() == 0);
+
+                th th = new th();
+                ResultSet rst = th.viewTopFeedback(limit, housing_id, stmt);
+
+                System.out.println("Top feedback: ");
+                System.out.println("hid              feedback            rating                 usefulness_score");
+                while(rst.next()){
+                   System.out.println(rst.getString("hid") + "     " +  rst.getString("feedback") + "     " + rst.getString("rating") + "          " + rst.getString("usefulness_score"));
                 }
         }
 
