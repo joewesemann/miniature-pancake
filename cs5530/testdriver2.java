@@ -43,7 +43,8 @@ public class testdriver2 {
         System.out.println("11. View most expenzive housing by category:");
         System.out.println("12. View highly rated housing by category: ");
         System.out.println("13. (ADMIN) View Top Trusted Users");
-		System.out.println("14. exit:");
+        System.out.println("14. (ADMIN) View top useful Users");
+		System.out.println("15. exit:");
 		System.out.println("please enter your choice:");
 
     }
@@ -205,6 +206,10 @@ public class testdriver2 {
                 else if (c == 13)
                 {
                 	topMUsers(con.stmt);
+                }
+                else if (c == 14)
+                {
+                	topMUseful(con.stmt);
                 }
                 else 
                 {
@@ -624,6 +629,44 @@ public class testdriver2 {
         {
         	e.printStackTrace();
         	System.err.println ("Error with query.");
+        }
+    }
+    //Method to get top M useful users
+    public static void topMUseful(Statement stmt) throws Exception
+    {
+    	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String m = "";	
+
+		if(currentUser.getType() != 2)
+		{
+			System.out.println("Not Admin User.");
+			return;
+		}
+		else
+		{
+			System.out.println("please enter a number of users:");
+
+			while ((m = in.readLine()) == null && m.length() == 0);
+        }
+    	
+    	String sql = "SELECT user_id, SUM(rating) " + 
+    				 "FROM rating " +
+    				 "GROUP BY user_id " +
+    				 "DESC LIMIT " + m + ";";
+							 
+		System.out.println("Top Useful Users: ");
+		
+		try{
+            ResultSet result;
+            result = stmt.executeQuery(sql);
+            while(result.next()){
+                System.out.println(result.getString("user_id"));
+            }
+        }
+        catch(Exception e)
+        {
+        	System.out.println("cannot execute the query");
+            e.printStackTrace();
         }
     }
     
