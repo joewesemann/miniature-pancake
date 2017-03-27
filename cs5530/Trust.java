@@ -6,10 +6,10 @@ public class Trust {
 	
         int id, user_id, trusted_id, trusted;
 
-	public Trust(int user_id, int trusted_id)
+	public Trust(int user_id, int trusted_id, int trusted)
 	{
             this.trusted_id = trusted_id;
-            this.trusted = 1;
+            this.trusted = trusted;
             this.user_id = user_id;
 	}
 

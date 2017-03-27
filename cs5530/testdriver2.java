@@ -35,13 +35,13 @@ public class testdriver2 {
 		System.out.println("3. Favorite a TH");
 		System.out.println("4. Edit existing TH");
 		System.out.println("5. Record stay during reservation");
-                System.out.println("6. Give Feedback");
-                System.out.println("7. Rate Feedback");
-                System.out.println("8. Mark user as trusted");
-                System.out.println("9. Browse Housing");
-                System.out.println("10. View most popular housing in each category:");
-                System.out.println("11. View most expenzive housing by category:");
-                System.out.println("12. View highly rated housing by category: ");
+        System.out.println("6. Give Feedback");
+        System.out.println("7. Rate Feedback");
+        System.out.println("8. Mark user as trusted");
+        System.out.println("9. Browse Housing");
+        System.out.println("10. View most popular housing in each category:");
+        System.out.println("11. View most expenzive housing by category:");
+        System.out.println("12. View highly rated housing by category: ");
 		System.out.println("13. exit:");
 		System.out.println("please enter your choice:");
 
@@ -405,11 +405,25 @@ public class testdriver2 {
         public static void trustUser(User currentUser, Statement stmt) throws Exception
         {
                 BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-                System.out.println("Please enter the ID of the user that you want to mark as trusted: ");
+                System.out.println("Please enter the ID of the user that you want to mark as trusted or Untrusted: ");
                 String trusted_id = "";
                 while ((trusted_id = in.readLine()) == null && trusted_id.length() == 0);
+                
+                System.out.println("1 to Trust User - 0 to Untrust user");
+				String trustNum = "";
+				while ((trustNum = in.readLine()) == null && trustNum.length() == 0);
+				
+				if(trustNum.equals("0"))
+				{
+					trustNum = "-1";
+				}
+				else if (!trustNum.equals("1"))
+				{
+					System.out.println("Not valid input - exiting to menu");
+					return;
+				}
 
-                Trust trust = new Trust(currentUser.getId(), Integer.parseInt(trusted_id));
+                Trust trust = new Trust(currentUser.getId(), Integer.parseInt(trusted_id), Integer.parseInt(trustNum));
                 trust.create(stmt);
                 System.out.println("Successfully marked user as trusted. Thanks.");
         }
