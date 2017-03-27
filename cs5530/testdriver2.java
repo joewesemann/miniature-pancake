@@ -35,9 +35,9 @@ public class testdriver2 {
 		System.out.println("3. Favorite a TH");
 		System.out.println("4. Edit existing TH");
 		System.out.println("5. Record stay during reservation");
-                System.out.println("6. Give Feedback");
-                System.out.println("7. Rate Feedback");
-                System.out.println("8. Mark user as trusted");
+        System.out.println("6. Give Feedback");
+        System.out.println("7. Rate Feedback");
+        System.out.println("8. Mark user as trusted");
 		System.out.println("9. exit:");
 		System.out.println("please enter your choice:");
     }
@@ -217,19 +217,35 @@ public class testdriver2 {
 		
 		while(proceed)
 		{
+			Reserve reservation = new Reserve();
 			System.out.println("Please enter reservation number for your stay (stay will not be recorded without valid reservation):");
 			String resId = "";
 			while ((resId = in.readLine()) == null && resId.length() == 0);
+			if(!reservation.verifyID(currentUser.getId(), Integer.parseInt(resId), stmt)){
+				System.out.println("You do not own this reservation, please try again.");
+				continue;
+			}
 		
 			System.out.println("Please enter first day in form YYYY-MM-DD for your stay:");
 			String from = "";
 			while ((from = in.readLine()) == null && from.length() == 0);
+			if(!reservation.verifyDate(from, Integer.parseInt(resId), stmt))
+			{
+				System.out.println("Your start date does not fit in your reservation, please try again");
+				continue;
+			}
 			
 			System.out.println("Please enter last day of your stay in form YYYY-MM-DD:");
 			String to = "";
 			while ((to = in.readLine()) == null && to.length() == 0);
-			
-			visitsToAdd.add(new Visit(Integer.parseInt(resId), from, to));
+			if(!reservation.verifyDate(to, Integer.parseInt(resId), stmt))
+			{
+				System.out.println("Your end date does not fit in your reservation, please try again.");
+				continue;
+			}
+			else{
+				visitsToAdd.add(new Visit(Integer.parseInt(resId), from, to));
+			}
 			
 			System.out.println("\n\nYour stays:");
 			for(Visit v : visitsToAdd)
