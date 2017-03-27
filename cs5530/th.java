@@ -36,6 +36,48 @@ public class th {
 		setPrice(price);
 	}
 
+    public ResultSet viewMostPopular(Statement stmt) {
+
+        String query = "select  a.name, max(stay_count) as stay_count, category from ( select  count(r.th_id) as stay_count,  r.th_id as hid,  th.category as category, th.name as name from reserve r  join visit v on v.reserve_id = r.id  join th on th.hid = r.th_id  group by r.th_id, th.category  ) a group by a.category, a.hid limit 5;";
+
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public ResultSet viewMostExpensive(Statement stmt) {
+
+        String query = "select name, category,  price from th category order by price desc limit 5";
+
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public ResultSet viewHighlyRated(Statement stmt) {
+
+        String query = "select th.name, th.category, feedback.rating from th join feedback on feedback.th_id = th.hid limit 5;";
+
+        ResultSet result = null;
+        try {
+            result = stmt.executeQuery(query);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public ResultSet complexSearch(String min_price, String max_price, String city, String state, String category, String[] keywords, String sort, Statement stmt) {
 
         String query = ""; 

@@ -39,8 +39,12 @@ public class testdriver2 {
                 System.out.println("7. Rate Feedback");
                 System.out.println("8. Mark user as trusted");
                 System.out.println("9. Browse Housing");
-		System.out.println("10. exit:");
+                System.out.println("10. View most popular housing in each category:");
+                System.out.println("11. View most expenzive housing by category:");
+                System.out.println("12. View highly rated housing by category: ");
+		System.out.println("13. exit:");
 		System.out.println("please enter your choice:");
+
     }
 	
 	public static void main(String[] args) {
@@ -184,6 +188,18 @@ public class testdriver2 {
                 else if (c == 9)
                 {
                         browseTh(currentUser, con.stmt);
+                }
+                else if (c == 10)
+                {
+                	viewMostPopular(con.stmt);
+                }
+                else if (c == 11) 
+                {
+                	viewMostExpensive(con.stmt);
+                }
+                else if (c == 12) 
+                {
+                        viewHighlyRated(con.stmt);
                 }
                 else 
                 {
@@ -391,6 +407,39 @@ public class testdriver2 {
                 ratingobj.create(stmt);
                 System.out.println("Successfully rated feedback. Thanks.");
         } 
+
+        public static void viewMostExpensive(Statement stmt) throws Exception
+        {
+                th th = new th();
+                ResultSet rst = th.viewMostExpensive(stmt);
+                System.out.println("Most expensive housing by category: ");
+                System.out.println("name                 category           price");
+                while(rst.next()){
+                   System.out.println(rst.getString("name") + "     " +  rst.getString("category") + "     " + rst.getString("price"));
+                }
+        }
+
+        public static void viewMostPopular(Statement stmt) throws Exception
+        {
+                th th = new th();
+                ResultSet rst = th.viewMostPopular(stmt);
+                System.out.println("Most popular housing by category: ");
+                System.out.println("name               stay_count        category");
+                while(rst.next()){
+                   System.out.println(rst.getString("a.name") + "     " +  rst.getString("stay_count") + "     " + rst.getString("category"));
+                }
+        }
+
+        public static void viewHighlyRated(Statement stmt) throws Exception
+        {
+                th th = new th();
+                ResultSet rst = th.viewHighlyRated(stmt);
+                System.out.println("Highly rated housing by category: ");
+                System.out.println("name              category            rating");
+                while(rst.next()){
+                   System.out.println(rst.getString("th.name") + "     " +  rst.getString("th.category") + "     " + rst.getString("feedback.rating"));
+                }
+        }
 
         // method for giving feedback 
         public static void recordFeedback(User currentUser, Statement stmt) throws Exception
