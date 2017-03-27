@@ -222,19 +222,35 @@ public class testdriver2 {
 		
 		while(proceed)
 		{
+			Reserve reservation = new Reserve();
 			System.out.println("Please enter reservation number for your stay (stay will not be recorded without valid reservation):");
 			String resId = "";
 			while ((resId = in.readLine()) == null && resId.length() == 0);
+			if(!reservation.verifyID(currentUser.getId(), Integer.parseInt(resId), stmt)){
+				System.out.println("You do not own this reservation, please try again.");
+				continue;
+			}
 		
 			System.out.println("Please enter first day in form YYYY-MM-DD for your stay:");
 			String from = "";
 			while ((from = in.readLine()) == null && from.length() == 0);
+			if(!reservation.verifyDate(from, Integer.parseInt(resId), stmt))
+			{
+				System.out.println("Your start date does not fit in your reservation, please try again");
+				continue;
+			}
 			
 			System.out.println("Please enter last day of your stay in form YYYY-MM-DD:");
 			String to = "";
 			while ((to = in.readLine()) == null && to.length() == 0);
-			
-			visitsToAdd.add(new Visit(Integer.parseInt(resId), from, to));
+			if(!reservation.verifyDate(to, Integer.parseInt(resId), stmt))
+			{
+				System.out.println("Your end date does not fit in your reservation, please try again.");
+				continue;
+			}
+			else{
+				visitsToAdd.add(new Visit(Integer.parseInt(resId), from, to));
+			}
 			
 			System.out.println("\n\nYour stays:");
 			for(Visit v : visitsToAdd)
@@ -465,6 +481,7 @@ public class testdriver2 {
 		String picture;
 		String year_built;
 		String telephone;
+		String price;
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
                          	
@@ -499,9 +516,12 @@ public class testdriver2 {
         System.out.println("please enter the telephone number for the property:");
         while ((telephone = in.readLine()) == null && telephone.length() == 0);
         
+        System.out.println("please enter the current Price Per Night:");
+        while ((price = in.readLine()) == null && price.length() == 0);
+        
         int uid = currentUser.getId();
         
-        currentTH = new th(uid, category, name, city, state, Integer.parseInt(zip_code), street_address, url, picture, Integer.parseInt(year_built), telephone);
+        currentTH = new th(uid, category, name, city, state, Integer.parseInt(zip_code), street_address, url, picture, Integer.parseInt(year_built), telephone, Double.parseDouble(price));
 		
 		try{
 			currentTH.insertTh(stmt);
@@ -528,6 +548,7 @@ public class testdriver2 {
 		String year_built;
 		String telephone;
 		String hid;
+		String price;
 		
 		
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -543,6 +564,7 @@ public class testdriver2 {
         		return;
         	}
         } catch(Exception e){
+        	e.printStackTrace();
         	System.err.println("Error looking up housing ID with given ID#");
         	return;
         }
@@ -553,19 +575,20 @@ public class testdriver2 {
         
         while(true){
             System.out.println("Hello " + currentUser.getName() + ", update which of the following for ID#: " + currentTH.getHid() + "?");
-			System.out.println("1.  Category:       " + currentTH.getCategory());
-        	System.out.println("2.  Name:           " + currentTH.getName());
-			System.out.println("3.  Street Address: " + currentTH.street_address);
-			System.out.println("4.  City:           " + currentTH.getCity());
-        	System.out.println("5.  State:          " + currentTH.getState());
-			System.out.println("6.  Zip Code:       " + currentTH.getZipCode());
-			System.out.println("7.  URL:            " + currentTH.getURL());
-        	System.out.println("8.  Picture URL:    " + currentTH.getPicture());
-			System.out.println("9.  Year Built:     " + currentTH.getYearBuilt());
-			System.out.println("10. Telephone:      " + currentTH.getTelephone());
-			System.out.println("11. Add Key Words");
-			System.out.println("12. Save & exit");
-			System.out.println("13. Exit without Saving");
+			System.out.println("1.  Category:        " + currentTH.getCategory());
+        	System.out.println("2.  Name:            " + currentTH.getName());
+			System.out.println("3.  Street Address:  " + currentTH.street_address);
+			System.out.println("4.  City:            " + currentTH.getCity());
+        	System.out.println("5.  State:           " + currentTH.getState());
+			System.out.println("6.  Zip Code:        " + currentTH.getZipCode());
+			System.out.println("7.  URL:             " + currentTH.getURL());
+        	System.out.println("8.  Picture URL:     " + currentTH.getPicture());
+			System.out.println("9.  Year Built:      " + currentTH.getYearBuilt());
+			System.out.println("10. Telephone:       " + currentTH.getTelephone());
+			System.out.println("11. Price Per Night: " + currentTH.getPrice());
+			System.out.println("12. Add Key Words");
+			System.out.println("13. Save & exit");
+			System.out.println("14. Exit without Saving");
 			System.out.println("please enter your choice:");
         	
         	String choice;
@@ -576,7 +599,7 @@ public class testdriver2 {
 			{
 				continue;
 			}
-			if (c<1 | c>13)
+			if (c<1 | c>14)
 				continue;
 			if (c==1)
             {
@@ -648,12 +671,19 @@ public class testdriver2 {
 				currentTH.setTelephone(telephone);
                 continue;
             }
-            else if(c == 11)
+			else if(c == 11)
+            {
+              	System.out.println("please enter new price per night:");
+				while ((price = in.readLine()) == null && price.length() == 0);
+				currentTH.setPrice(price);
+                continue;
+            }
+            else if(c == 12)
             {
             	addKeywords(currentTH, stmt);
             	continue;
             }
-            else if(c == 12)
+            else if(c == 13)
             {
               	try{
 					currentTH.updateTH(stmt);

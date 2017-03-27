@@ -16,10 +16,11 @@ public class th {
     String picture;
     int year_built;
     String telephone;
+    double price;
 	
 	public th(){}
 
-	public th(int user_id, String category, String name, String city, String state, int zip_code, String street_address, String url, String picture, int year_built, String telephone)
+	public th(int user_id, String category, String name, String city, String state, int zip_code, String street_address, String url, String picture, int year_built, String telephone, Double price)
 	{
 		setUserId(user_id);
 		setCategory(category);
@@ -32,6 +33,7 @@ public class th {
 		setPicture(picture);
 		setYearBuilt(year_built);
 		setTelephone(telephone);
+		setPrice(price);
 	}
 
     public ResultSet complexSearch(String min_price, String max_price, String city, String state, String category, String[] keywords, String sort, Statement stmt) {
@@ -169,8 +171,8 @@ public class th {
     }
 
     public void insertTh(Statement stmt) {
-    	String sql = "INSERT INTO th (user_id, category, name, city, state, zip_code, street_address, url, picture, year_built, telephone) " + 
-    	             "VALUES (" + user_id + ", '" + category + "', '" + name + "', '" + city + "', '" + state + "', " + zip_code + ", '" + street_address + "', '" + url + "', '" + picture + "', " + year_built + ", '" + telephone + "');";
+    	String sql = "INSERT INTO th (user_id, category, name, city, state, zip_code, street_address, url, picture, year_built, telephone, price) " + 
+    	             "VALUES (" + user_id + ", '" + category + "', '" + name + "', '" + city + "', '" + state + "', " + zip_code + ", '" + street_address + "', '" + url + "', '" + picture + "', " + year_built + ", '" + telephone + "', " + getPrice() + ");";
         System.out.println("executing "+sql);
         try{
         	stmt.executeUpdate(sql);
@@ -228,18 +230,19 @@ public class th {
 	       }
 		System.out.println("User.getUser Query = "+query+"\n");
 		while (results.next()){
-			setHid(results.getInt("hid"));
-		    setUserId(results.getInt("user_id"));
-		    setCategory(results.getString("category"));
-		    setName(results.getString("name"));
-		    setCity(results.getString("city"));
-		    setState(results.getString("state"));
-		    setZipCode(results.getInt("zip_code"));
-		    setStreetAddress(results.getString("street_address"));
-		    setUrl(results.getString("url"));
-		    setPicture(results.getString("picture"));
-		    setYearBuilt(results.getInt("year_built"));
-		    setTelephone(results.getString("telephone"));
+			if(results.getString("hid") != null) setHid(results.getInt("hid"));
+		    if(results.getString("user_id") != null) setUserId(results.getInt("user_id"));
+		    if(results.getString("category") != null) setCategory(results.getString("category"));
+		    if(results.getString("name") != null) setName(results.getString("name"));
+		    if(results.getString("city") != null) setCity(results.getString("city"));
+		    if(results.getString("state") != null) setState(results.getString("state"));
+		    if(results.getString("zip_code") != null) setZipCode(results.getInt("zip_code"));
+		    if(results.getString("street_address") != null) setStreetAddress(results.getString("street_address"));
+		    if(results.getString("url") != null) setUrl(results.getString("url"));
+		    if(results.getString("picture") != null) setPicture(results.getString("picture"));
+		    if(results.getString("year_built") != null) setYearBuilt(results.getInt("year_built"));
+		    if(results.getString("telephone") != null) setTelephone(results.getString("telephone"));
+		    if(results.getString("price") != null) setPrice(results.getString("price"));
 		}
 	}
 	
@@ -340,5 +343,20 @@ public class th {
     
     public String getTelephone(){
         return telephone;
+    }
+    
+    public void setPrice(double price)
+    {
+        this.price = price;
+    }
+    
+    public void setPrice(String price)
+    {
+        this.price = Double.parseDouble(price);
+    }
+    
+    public double getPrice()
+    {
+        return this.price;
     }
 }
