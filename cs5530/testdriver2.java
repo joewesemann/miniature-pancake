@@ -502,18 +502,29 @@ public class testdriver2 {
         // method for giving feedback 
         public static void recordFeedback(User currentUser, Statement stmt) throws Exception
         {
+
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         	System.out.println("Please enter the Housing ID of the housing you would like to give feedback for: ");
         	String housing_id = "";
         	while ((housing_id = in.readLine()) == null && housing_id.length() == 0);
+        	String sql = "SELECT COUNT(*) FROM feedback WHERE user_id = " + currentUser.getId() + " AND th_id = " + housing_id + ";";
+        	ResultSet rs = stmt.executeQuery(sql);
+            while(rs.next())
+            {
+                if(rs.getInt("COUNT(*)") > 0)
+                {
+                	System.out.println("Feedback already exists for user on this housing");
+                	return;
+                }
+            }
                 
-                System.out.println("Please enter the rating for this housing (1 - 10): ");
-                String rating = "";
-                while ((rating = in.readLine()) == null && rating.length() == 0);
+            System.out.println("Please enter the rating for this housing (1 - 10): ");
+            String rating = "";
+            while ((rating = in.readLine()) == null && rating.length() == 0);
 
-                System.out.println("Please enter your feedback for this housing: ");
-                String text = "";
-                while ((text = in.readLine()) == null && text.length() == 0);
+            System.out.println("Please enter your feedback for this housing: ");
+            String text = "";
+            while ((text = in.readLine()) == null && text.length() == 0);
 
         	Feedback feedback = new Feedback(Integer.parseInt(housing_id), Integer.parseInt(rating), currentUser.getId(), text);
         	feedback.create(stmt);
