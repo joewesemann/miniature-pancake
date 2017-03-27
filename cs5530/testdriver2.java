@@ -315,6 +315,30 @@ public class testdriver2 {
 			}
 		}
 	}
+	
+	// suggest TH's
+	public static void suggestTH(int hid, Statement stmt) throws Exception
+	{
+		String sql = "SELECT th_id, COUNT(th_id) AS Count  FROM (select th_id from (select user_id, th_id from reserve, visit where reserve.id = visit.reserve_id) AS one " +
+							 "where user_id IN (SELECT user_id from (SELECT user_id, th_id from reserve, visit WHERE reserve.id = visit.reserve_id) AS two WHERE th_id = " + hid + ")) AS three " + 
+							 "WHERE th_id != " + hid + " GROUP BY th_id ORDER BY COUNT(th_id) DESC LIMIT 5;";
+							 
+		System.out.println("Based off of your reservation, we would suggest the following places (By housing ID): ");
+		
+		try{
+            ResultSet result;
+            result = stmt.executeQuery(sql);
+            while(result.next()){
+                System.out.println(result.getString("th_id"));
+            }
+        }
+        catch(Exception e)
+        {
+        	System.out.println("cannot execute the query");
+            e.printStackTrace();
+        }
+		
+	}
 
         // search TH's
         public static void browseTh(User currentUser, Statement stmt) throws Exception
@@ -465,6 +489,7 @@ public class testdriver2 {
 		if(Integer.parseInt(confirm) == 0){
 			reserve.create(stmt);
 			System.out.println("Your reservation was succesfully created. Thanks.");
+			suggestTH(reserve.getHid(), stmt);
 		}
 	}
 	

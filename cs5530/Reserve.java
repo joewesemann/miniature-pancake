@@ -80,7 +80,7 @@ public class Reserve {
 	}
 
     public void create(Statement stmt) {
-    	String sql = "INSERT INTO reserve (`from`, `to`, `price_per_night`, `date_reserved`, `user_id`, `th_id`, `number_in_party`) VALUES ('" + from + " 00:00:00', '" + to + " 00:00:00', " + price_per_night + ", NOW(), " +  user_id + ", " + th_id + "," + number_in_party + ");";
+    	String sql = "INSERT INTO reserve (`from`, `to`, `price_per_night`, `date_reserved`, `user_id`, `th_id`, `number_in_party`) VALUES ('" + from + "', '" + to + "', " + price_per_night + ", NOW(), " +  user_id + ", " + th_id + "," + number_in_party + ");";
         try{
         	stmt.executeUpdate(sql);
         
@@ -109,4 +109,8 @@ public class Reserve {
         return this.id;
     }
 
+    public int getHid()
+    {
+        return this.th_id;
+    }
 }
